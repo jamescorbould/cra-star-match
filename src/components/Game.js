@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import utils from '../math-utils';
-
 import StarsDisplay from './StarsDisplay';
 import PlayNumber from './PlayNumber';
 import PlayAgain from './PlayAgain';
@@ -75,7 +74,7 @@ const Game = (props) => {
   return (
     <div className="game">
       <div className="help">
-        xPick 1 or more numbers that sum to the number of stars
+        Pick 1 or more numbers that sum to the number of stars
       </div>
       <div className="body">
         <div className="left">
@@ -96,7 +95,7 @@ const Game = (props) => {
           ))}
         </div>
       </div>
-      <div className="timer">Time Remainingx: {secondsLeft}</div>
+      <div className="timer">Time Remaining: {secondsLeft}</div>
       {gameStatus === 'won' ? <LeaderBoardForm /> : null}
       <div>Leaderboard</div>
       <LeaderBoard />
