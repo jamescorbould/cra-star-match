@@ -4,9 +4,9 @@ import App from './App';
 import renderer from 'react-test-renderer';
 
 describe('App', () => {
-	it('renders correctly', () => {
-		const tree = renderer.create(<App />).toJSON();
+  it('renders correctly', () => {
+    const tree = renderer.create(<App />).toJSON();
 
-		expect(tree).toMatchSnapshot();
-	});
+    expect(tree).toMatchSnapshot();
+  });
 });
