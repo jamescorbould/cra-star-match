@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LeaderBoardApi.Models;
+using LeaderBoardApi.Repositories;
 
 namespace LeaderBoardApi.Controllers
 {
@@ -14,25 +15,32 @@ namespace LeaderBoardApi.Controllers
     [ApiController]
     public class LeaderBoardController : ControllerBase
     {
-        private readonly LeaderBoardContext _context;
+        private readonly IPersonRepository _repository;
 
-        public LeaderBoardController(LeaderBoardContext context)
+        public LeaderBoardController(IPersonRepository repository)
         {
-            _context = context;
+            this._repository = repository;
         }
 
         // GET: api/LeaderBoard
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPerson()
+        public async Task<ActionResult<IEnumerable<Person>>> GetPersonAsync()
         {
-            return await _context.Person.ToListAsync();
+            var persons = await _repository.GetPersonsAsync();
+
+            if (persons is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(persons);
         }
 
         // GET: api/LeaderBoard/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Person>> GetPerson(int id)
         {
-            var person = await _context.Person.FindAsync(id);
+            var person = await _repository.GetPersonAsync(id);
 
             if (person == null)
             {
@@ -52,23 +60,7 @@ namespace LeaderBoardApi.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(person).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PersonExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _repository.UpdatePersonAsync(id, person);
 
             return NoContent();
         }
@@ -78,31 +70,24 @@ namespace LeaderBoardApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Person>> PostPerson(Person person)
         {
-            _context.Person.Add(person);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetPerson), new { id = person.Id }, person);
+            var result = await _repository.CreatePersonAsync(person);
+            return CreatedAtAction(nameof(GetPerson), new { id = result.Id }, result);
         }
 
         // DELETE: api/LeaderBoard/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(int id)
         {
-            var person = await _context.Person.FindAsync(id);
+            var person = await _repository.GetPersonAsync(id);
+
             if (person == null)
             {
                 return NotFound();
             }
 
-            _context.Person.Remove(person);
-            await _context.SaveChangesAsync();
+            _repository.DeletePersonAsync(id);
 
             return NoContent();
-        }
-
-        private bool PersonExists(int id)
-        {
-            return _context.Person.Any(e => e.Id == id);
         }
     }
 }
