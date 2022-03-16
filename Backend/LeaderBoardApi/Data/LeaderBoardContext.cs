@@ -13,5 +13,15 @@ public class LeaderBoardContext : DbContext
     {
     }
 
-    public DbSet<LeaderBoardApi.Models.Person> Person { get; set; }
+    public DbSet<Person> Person { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)    
+    {    
+        modelBuilder.Entity<Person>().HasData    
+        (    
+            new Person { Id = 1, Name = "Bob", TimeSecs = "3.01" },
+            new Person { Id = 2, Name = "John", TimeSecs = "4.02" },
+            new Person { Id = 3, Name = "Simon", TimeSecs = "2.59" }
+        );
+    }
 }

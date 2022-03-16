@@ -16,10 +16,12 @@ namespace LeaderBoardApi.Controllers
     public class LeaderBoardController : ControllerBase
     {
         private readonly IPersonRepository _repository;
+        private readonly ILogger<LeaderBoardController> _logger;
 
-        public LeaderBoardController(IPersonRepository repository)
+        public LeaderBoardController(IPersonRepository repository, ILogger<LeaderBoardController> logger)
         {
             this._repository = repository;
+            this._logger = logger;
         }
 
         // GET: api/LeaderBoard
@@ -27,6 +29,8 @@ namespace LeaderBoardApi.Controllers
         public async Task<ActionResult<IEnumerable<Person>>> GetPersonAsync()
         {
             var persons = await _repository.GetPersonsAsync();
+
+            _logger.LogInformation($"INFO - {DateTime.UtcNow.ToString("hh:mm:ss")}: Retrieved {persons.Count()}.");
 
             if (persons is null)
             {

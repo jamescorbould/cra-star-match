@@ -1,10 +1,12 @@
+using LeaderBoardApi.Utilities;
+
 namespace LeaderBoardApi
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().CreateDatabase<LeaderBoardContext>().Run();  
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
