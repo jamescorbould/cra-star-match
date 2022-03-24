@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LeaderBoardApi.Models;
+using LeaderBoardApi.Models.Dtos;
 using LeaderBoardApi.Repositories;
 
 namespace LeaderBoardApi.Controllers
@@ -72,8 +73,19 @@ namespace LeaderBoardApi.Controllers
         // POST: api/LeaderBoard
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
+        public async Task<ActionResult<PersonDto>> PostPerson(PersonDto personDto)
         {
+            var persons = await _repository.GetPersonsAsync();
+
+            var max = persons?.Max(p => (int?)p.Id);
+
+            Person person = new()
+            {
+                Id = (max == null ? 0 : (int)++max),
+                Name = personDto.Name,
+                TimeSecs = personDto.TimeSecs
+            };
+
             var result = await _repository.CreatePersonAsync(person);
             return CreatedAtAction(nameof(GetPerson), new { id = result.Id }, result);
         }

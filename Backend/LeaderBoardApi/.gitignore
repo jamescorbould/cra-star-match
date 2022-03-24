@@ -456,5 +456,5 @@ $RECYCLE.BIN/
 # VS Code SQL Tools Extension
 *session.sql
 
-.db-shm
-.db-wal
+*.db-shm
+*.db-wal
