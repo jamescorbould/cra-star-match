@@ -1,11 +1,5 @@
 #nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using LeaderBoardApi.Models;
 using LeaderBoardApi.Models.Dtos;
 using LeaderBoardApi.Repositories;
@@ -27,7 +21,7 @@ namespace LeaderBoardApi.Controllers
 
         // GET: api/LeaderBoard
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Person>>> GetPersonAsync()
+        public async Task<ActionResult<PersonList>> GetPersonAsync()
         {
             var persons = await _repository.GetPersonsAsync();
 
@@ -38,7 +32,10 @@ namespace LeaderBoardApi.Controllers
                 return NotFound();
             }
 
-            return Ok(persons);
+            var personsList = new PersonList();
+            personsList.Persons.AddRange(persons);
+
+            return Ok(personsList);
         }
 
         // GET: api/LeaderBoard/5
