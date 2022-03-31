@@ -29,6 +29,12 @@ namespace LeaderBoardApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "LeaderBoardAPI", Version = "v1" });
             });
 
+            services.AddCors(options => {
+                options.AddPolicy("devOnlyCorsPolicy", builder => {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
+
             services.AddHealthChecks();
 
             services.AddDbContext<LeaderBoardContext>(options => options.UseSqlite(Configuration.GetConnectionString("LeaderBoardContext")));
@@ -52,6 +58,8 @@ namespace LeaderBoardApi
 
             app.UseRouting();
 
+            app.UseCors("devOnlyCorsPolicy");
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
