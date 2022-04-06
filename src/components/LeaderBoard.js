@@ -1,12 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const getLeaders = () => {
-  const jsonData = require('./leaderboard.json');
-  return Array.from(jsonData.leaders);
+const getLeaders = async () => {
+  const response = await fetch('http://localhost:7190/api/LeaderBoard', {
+    mode: 'cors',
+  });
+  const jsonData = await response.json();
+  console.log('jsonData = ' + jsonData);
+  console.log('leaders = ' + Array.from(jsonData.persons));
+  return Array.from(jsonData.persons);
 };
 
 const LeaderBoard = (props) => {
-  const leaders = getLeaders();
+  const [leaders, setLeaders] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const leaders = await getLeaders();
+      setLeaders(leaders);
+    }
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -20,6 +33,7 @@ const LeaderBoard = (props) => {
         </thead>
         <tbody>
           {leaders.map((leader) => {
+            console.log(leader.name);
             return (
               <tr key={leader.id}>
                 <td>{leader.name}</td>
