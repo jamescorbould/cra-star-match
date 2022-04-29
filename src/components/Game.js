@@ -96,8 +96,8 @@ const Game = (props) => {
         </div>
       </div>
       <div className="timer">Time Remaining: {secondsLeft}</div>
-      {gameStatus === 'won' ? <LeaderBoardForm /> : null}
-      <div>Leaderboard</div>
+      {gameStatus === 'won' ? <LeaderBoardForm timeSecs={secondsLeft} /> : null}
+      <div className="leaderboard-banner">Leaderboard</div>
       <LeaderBoard />
     </div>
   );

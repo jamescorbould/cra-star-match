@@ -13,6 +13,7 @@ const getLeaders = async () => {
 const LeaderBoard = (props) => {
   const [leaders, setLeaders] = useState([]);
 
+  // TODO: Try using React Query.
   useEffect(() => {
     async function fetchData() {
       const leaders = await getLeaders();
