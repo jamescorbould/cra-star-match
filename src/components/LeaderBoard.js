@@ -1,27 +1,6 @@
-import React, { useState, useEffect } from 'react';
-
-const getLeaders = async () => {
-  const response = await fetch('http://localhost:7190/api/LeaderBoard', {
-    mode: 'cors',
-  });
-  const jsonData = await response.json();
-  console.log('jsonData = ' + jsonData);
-  console.log('leaders = ' + Array.from(jsonData.persons));
-  return Array.from(jsonData.persons);
-};
+import React from 'react';
 
 const LeaderBoard = (props) => {
-  const [leaders, setLeaders] = useState([]);
-
-  // TODO: Try using React Query.
-  useEffect(() => {
-    async function fetchData() {
-      const leaders = await getLeaders();
-      setLeaders(leaders);
-    }
-    fetchData();
-  }, []);
-
   return (
     <div>
       <table className="leaderboard-table">
@@ -33,7 +12,7 @@ const LeaderBoard = (props) => {
           </tr>
         </thead>
         <tbody>
-          {leaders.map((leader) => {
+          {props.leaderBoardList.map((leader) => {
             console.log(leader.name);
             return (
               <tr key={leader.id}>

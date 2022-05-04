@@ -1,4 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
+const getLeaders = async () => {
+  const response = await fetch('http://localhost:7190/api/LeaderBoard', {
+    mode: 'cors',
+  });
+  const jsonData = await response.json();
+  console.log('jsonData = ' + jsonData);
+  console.log('leaders = ' + Array.from(jsonData.persons));
+  return Array.from(jsonData.persons);
+};
 
 const LeaderBoardForm = (props) => {
   const [name, setName] = useState([]);
@@ -16,6 +26,17 @@ const LeaderBoardForm = (props) => {
     fetch('http://localhost:7190/api/LeaderBoard', requestOptions)
       .then((response) => response.json())
       .then((data) => setId(data.id));
+
+    fetch('http://localhost:7190/api/LeaderBoard/{id}', {
+      mode: 'cors',
+    })
+      .then((response) => response.json())
+      .then((data) =>
+        props.setLeaderBoardList((previousList) => [
+          ...previousList,
+          ...data.persons,
+        ]),
+      );
 
     alert('Thanks!');
   };

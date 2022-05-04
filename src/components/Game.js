@@ -6,6 +6,16 @@ import PlayAgain from './PlayAgain';
 import LeaderBoard from './LeaderBoard';
 import LeaderBoardForm from './LeaderBoardForm';
 
+const getLeaders = async () => {
+  const response = await fetch('http://localhost:7190/api/LeaderBoard', {
+    mode: 'cors',
+  });
+  const jsonData = await response.json();
+  console.log('jsonData = ' + jsonData);
+  console.log('leaders = ' + Array.from(jsonData.persons));
+  return Array.from(jsonData.persons);
+};
+
 const useGameState = () => {
   const [stars, setStars] = useState(utils.random(1, 9));
   const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
@@ -35,13 +45,20 @@ const useGameState = () => {
     }
   };
 
-  return { stars, availableNums, candidateNums, secondsLeft, setGameState };
+  return {
+    stars,
+    availableNums,
+    candidateNums,
+    secondsLeft,
+    setGameState,
+  };
 };
 
 const Game = (props) => {
   const { stars, availableNums, candidateNums, secondsLeft, setGameState } =
     useGameState();
 
+  const [leaderBoardList, setLeaderBoardList] = useState([]);
   const candidatesAreWrong = utils.sum(candidateNums) > stars;
   const gameStatus =
     availableNums.length === 0 ? 'won' : secondsLeft === 0 ? 'lost' : 'active';
@@ -71,6 +88,14 @@ const Game = (props) => {
     setGameState(newCandidateNums);
   };
 
+  useEffect(() => {
+    async function fetchData() {
+      const leaders = await getLeaders();
+      setLeaderBoardList(leaders);
+    }
+    fetchData();
+  }, []);
+
   return (
     <div className="game">
       <div className="help">
@@ -96,9 +121,13 @@ const Game = (props) => {
         </div>
       </div>
       <div className="timer">Time Remaining: {secondsLeft}</div>
-      {gameStatus === 'won' ? <LeaderBoardForm timeSecs={secondsLeft} /> : null}
-      <div className="leaderboard-banner">Leaderboard</div>
-      <LeaderBoard />
+      {gameStatus === 'won' ? (
+        <LeaderBoardForm
+          timeSecs={secondsLeft}
+          setLeaderBoardList={setLeaderBoardList}
+        />
+      ) : null}
+      <LeaderBoard leaderBoardList={leaderBoardList} />
     </div>
   );
 };
