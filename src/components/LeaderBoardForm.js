@@ -1,20 +1,10 @@
 import React, { useState } from 'react';
 
-const getLeaders = async () => {
-  const response = await fetch('http://localhost:7190/api/LeaderBoard', {
-    mode: 'cors',
-  });
-  const jsonData = await response.json();
-  console.log('jsonData = ' + jsonData);
-  console.log('leaders = ' + Array.from(jsonData.persons));
-  return Array.from(jsonData.persons);
-};
-
 const LeaderBoardForm = (props) => {
   const [name, setName] = useState([]);
   const [id, setId] = useState([]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const requestOptions = {
@@ -23,20 +13,24 @@ const LeaderBoardForm = (props) => {
       body: JSON.stringify({ name: name, timeSecs: props.timeSecs.toString() }),
     };
 
-    fetch('http://localhost:7190/api/LeaderBoard', requestOptions)
-      .then((response) => response.json())
-      .then((data) => setId(data.id));
+    const response = await fetch(
+      'http://localhost:7190/api/LeaderBoard',
+      requestOptions,
+    );
 
-    fetch('http://localhost:7190/api/LeaderBoard/{id}', {
+    const leader = await response.json();
+    setId(leader.id);
+
+    console.log('post done, id = ' + id);
+
+    const response2 = await fetch('http://localhost:7190/api/LeaderBoard', {
       mode: 'cors',
-    })
-      .then((response) => response.json())
-      .then((data) =>
-        props.setLeaderBoardList((previousList) => [
-          ...previousList,
-          ...data.persons,
-        ]),
-      );
+    });
+
+    const leaders = await response2.json();
+    props.setLeaderBoardList(Array.from(leaders.persons));
+
+    console.log('get done');
 
     alert('Thanks!');
   };
