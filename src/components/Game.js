@@ -21,6 +21,9 @@ const useGameState = () => {
   const [availableNums, setAvailableNums] = useState(utils.range(1, 9));
   const [candidateNums, setCandidateNums] = useState([]);
   const [secondsLeft, setSecondsLeft] = useState(10);
+  const [gameStatus, setGameStatus] = useState(
+    availableNums.length === 0 ? 'won' : secondsLeft === 0 ? 'lost' : 'active',
+  );
 
   useEffect(() => {
     if (secondsLeft > 0 && availableNums.length > 0) {
@@ -28,9 +31,21 @@ const useGameState = () => {
         () => setSecondsLeft((prevSecondsLeft) => prevSecondsLeft - 1),
         1000,
       );
-      return () => clearTimeout(timerId);
+      setGameStatus('active');
+      return () => {
+        clearTimeout(timerId);
+      };
+    } else {
+      setGameStatus(
+        availableNums.length === 0
+          ? 'won'
+          : secondsLeft === 0
+          ? 'lost'
+          : 'active',
+      );
+      console.log(`gameStatus2 = ${gameStatus}`);
     }
-  }, [secondsLeft, availableNums]);
+  }, [secondsLeft, availableNums, gameStatus]);
 
   const setGameState = (newCandidateNums) => {
     if (utils.sum(newCandidateNums) !== stars) {
@@ -43,6 +58,14 @@ const useGameState = () => {
       setAvailableNums(newAvailableNums);
       setCandidateNums([]);
     }
+
+    setGameStatus(
+      availableNums.length === 0
+        ? 'won'
+        : secondsLeft === 0
+        ? 'lost'
+        : 'active',
+    );
   };
 
   return {
@@ -50,18 +73,24 @@ const useGameState = () => {
     availableNums,
     candidateNums,
     secondsLeft,
+    gameStatus,
     setGameState,
   };
 };
 
 const Game = (props) => {
-  const { stars, availableNums, candidateNums, secondsLeft, setGameState } =
-    useGameState();
+  const {
+    stars,
+    availableNums,
+    candidateNums,
+    secondsLeft,
+    gameStatus,
+    setGameState,
+  } = useGameState();
 
   const [leaderBoardList, setLeaderBoardList] = useState([]);
+
   const candidatesAreWrong = utils.sum(candidateNums) > stars;
-  const gameStatus =
-    availableNums.length === 0 ? 'won' : secondsLeft === 0 ? 'lost' : 'active';
 
   const numberStatus = (number) => {
     if (!availableNums.includes(number)) {
@@ -108,6 +137,7 @@ const Game = (props) => {
           ) : (
             <StarsDisplay count={stars} />
           )}
+          {console.log(`gameStatus = ${gameStatus}`)}
         </div>
         <div className="right">
           {utils.range(1, 9).map((number) => (
@@ -125,6 +155,7 @@ const Game = (props) => {
         <LeaderBoardForm
           timeSecs={secondsLeft}
           setLeaderBoardList={setLeaderBoardList}
+          //setGameStatus={setGameStatus}
         />
       ) : null}
       <LeaderBoard leaderBoardList={leaderBoardList} />

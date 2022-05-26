@@ -21,16 +21,14 @@ const LeaderBoardForm = (props) => {
     const leader = await response.json();
     setId(leader.id);
 
-    console.log('post done, id = ' + id);
-
     const response2 = await fetch('http://localhost:7190/api/LeaderBoard', {
       mode: 'cors',
     });
 
     const leaders = await response2.json();
-    props.setLeaderBoardList(Array.from(leaders.persons));
 
-    console.log('get done');
+    props.setLeaderBoardList(Array.from(leaders.persons));
+    //props.setGameStatus('new');
 
     alert('Thanks!');
   };
