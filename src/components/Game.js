@@ -37,7 +37,9 @@ const useGameState = () => {
       };
     } else {
       setGameStatus(
-        availableNums.length === 0
+        gameStatus === 'new'
+          ? 'new'
+          : availableNums.length === 0
           ? 'won'
           : secondsLeft === 0
           ? 'lost'
@@ -60,7 +62,9 @@ const useGameState = () => {
     }
 
     setGameStatus(
-      availableNums.length === 0
+      gameStatus === 'new'
+        ? 'new'
+        : availableNums.length === 0
         ? 'won'
         : secondsLeft === 0
         ? 'lost'
@@ -74,6 +78,7 @@ const useGameState = () => {
     candidateNums,
     secondsLeft,
     gameStatus,
+    setGameStatus,
     setGameState,
   };
 };
@@ -85,6 +90,7 @@ const Game = (props) => {
     candidateNums,
     secondsLeft,
     gameStatus,
+    setGameStatus,
     setGameState,
   } = useGameState();
 
@@ -155,7 +161,7 @@ const Game = (props) => {
         <LeaderBoardForm
           timeSecs={secondsLeft}
           setLeaderBoardList={setLeaderBoardList}
-          //setGameStatus={setGameStatus}
+          setGameStatus={setGameStatus}
         />
       ) : null}
       <LeaderBoard leaderBoardList={leaderBoardList} />

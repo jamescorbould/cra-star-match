@@ -28,7 +28,7 @@ const LeaderBoardForm = (props) => {
     const leaders = await response2.json();
 
     props.setLeaderBoardList(Array.from(leaders.persons));
-    //props.setGameStatus('new');
+    props.setGameStatus('new');
 
     alert('Thanks!');
   };
