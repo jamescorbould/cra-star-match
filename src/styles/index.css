@@ -36,6 +36,21 @@
   font-size: 45px;
 }
 
+.arrowUp {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+.arrowUp:after {
+  content: '\21A5';
+  font-size: 30px;
+}
+
+.arrowDown {
+  content: '\21A7';
+  font-size: 30px;
+}
+
 .number {
   background-color: #eee;
   border: thin solid #ddd;
@@ -75,7 +90,8 @@
   margin-top: 10px;
 }
 
-th, td {
+th,
+td {
   border: 2px solid black;
   text-align: left;
 }

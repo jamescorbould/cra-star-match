@@ -5,6 +5,7 @@ import PlayNumber from './PlayNumber';
 import PlayAgain from './PlayAgain';
 import LeaderBoard from './LeaderBoard';
 import LeaderBoardForm from './LeaderBoardForm';
+import Arrow from './Arrow';
 
 const getLeaders = async () => {
   const response = await fetch('http://localhost:7190/api/LeaderBoard', {
@@ -45,7 +46,6 @@ const useGameState = () => {
           ? 'lost'
           : 'active',
       );
-      console.log(`gameStatus2 = ${gameStatus}`);
     }
   }, [secondsLeft, availableNums, gameStatus]);
 
@@ -143,7 +143,6 @@ const Game = (props) => {
           ) : (
             <StarsDisplay count={stars} />
           )}
-          {console.log(`gameStatus = ${gameStatus}`)}
         </div>
         <div className="right">
           {utils.range(1, 9).map((number) => (
@@ -164,6 +163,7 @@ const Game = (props) => {
           setGameStatus={setGameStatus}
         />
       ) : null}
+      <Arrow />
       <LeaderBoard leaderBoardList={leaderBoardList} />
     </div>
   );
