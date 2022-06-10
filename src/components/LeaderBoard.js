@@ -3,7 +3,6 @@ import React from 'react';
 const LeaderBoard = (props) => {
   return (
     <>
-      <div className="leaderboard-banner">Leaderboard</div>
       <div>
         <table className="leaderboard-table">
           <thead>

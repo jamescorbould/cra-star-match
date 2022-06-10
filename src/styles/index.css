@@ -36,19 +36,28 @@
   font-size: 45px;
 }
 
+.arrow {
+  text-align: center;
+}
+
 .arrowUp {
   display: inline-block;
   margin: 0 15px;
 }
 
 .arrowUp:after {
-  content: '\21A5';
-  font-size: 30px;
+  content: '\2191';
+  font-size: 15px;
 }
 
 .arrowDown {
-  content: '\21A7';
-  font-size: 30px;
+  display: inline-block;
+  margin: 0 15px;
+}
+
+.arrowDown:after {
+  content: '\2193';
+  font-size: 15px;
 }
 
 .number {

@@ -123,12 +123,15 @@ const Game = (props) => {
     setGameState(newCandidateNums);
   };
 
+  const [showLeaderBoard, setShowLeaderBoard] = useState([]);
+
   useEffect(() => {
     async function fetchData() {
       const leaders = await getLeaders();
       setLeaderBoardList(leaders);
     }
     fetchData();
+    setShowLeaderBoard(true);
   }, []);
 
   return (
@@ -163,8 +166,13 @@ const Game = (props) => {
           setGameStatus={setGameStatus}
         />
       ) : null}
-      <Arrow />
-      <LeaderBoard leaderBoardList={leaderBoardList} />
+      <div className="arrow">
+        <Arrow setShowLeaderBoard={setShowLeaderBoard} />
+      </div>
+      <div className="leaderboard-banner">Leaderboard</div>
+      {showLeaderBoard ? (
+        <LeaderBoard leaderBoardList={leaderBoardList} />
+      ) : null}
     </div>
   );
 };
