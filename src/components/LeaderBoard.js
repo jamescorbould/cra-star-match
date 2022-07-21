@@ -1,5 +1,5 @@
 import React from 'react';
-
+// TODO: scrollbar for leaderboard plus try mui.
 const LeaderBoard = (props) => {
   return (
     <>

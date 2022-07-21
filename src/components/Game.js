@@ -6,6 +6,7 @@ import PlayAgain from './PlayAgain';
 import LeaderBoard from './LeaderBoard';
 import LeaderBoardForm from './LeaderBoardForm';
 import Arrow from './Arrow';
+import LeaderBoardMui from './LeaderBoardMui';
 
 const getLeaders = async () => {
   const response = await fetch('http://localhost:7190/api/LeaderBoard', {
@@ -171,7 +172,7 @@ const Game = (props) => {
       </div>
       <div className="leaderboard-banner">Leaderboard</div>
       {showLeaderBoard ? (
-        <LeaderBoard leaderBoardList={leaderBoardList} />
+        <LeaderBoardMui leaderBoardList={leaderBoardList} />
       ) : null}
     </div>
   );
