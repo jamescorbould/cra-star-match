@@ -3,7 +3,6 @@ import utils from '../math-utils';
 import StarsDisplay from './StarsDisplay';
 import PlayNumber from './PlayNumber';
 import PlayAgain from './PlayAgain';
-import LeaderBoard from './LeaderBoard';
 import LeaderBoardForm from './LeaderBoardForm';
 import Arrow from './Arrow';
 import LeaderBoardMui from './LeaderBoardMui';
@@ -13,8 +12,6 @@ const getLeaders = async () => {
     mode: 'cors',
   });
   const jsonData = await response.json();
-  console.log('jsonData = ' + jsonData);
-  console.log('leaders = ' + Array.from(jsonData.persons));
   return Array.from(jsonData.persons);
 };
 
@@ -162,7 +159,7 @@ const Game = (props) => {
       <div className="timer">Time Remaining: {secondsLeft}</div>
       {gameStatus === 'won' ? (
         <LeaderBoardForm
-          timeSecs={secondsLeft}
+          timeSecs={10 - secondsLeft}
           setLeaderBoardList={setLeaderBoardList}
           setGameStatus={setGameStatus}
         />
